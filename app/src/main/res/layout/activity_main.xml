@@ -79,6 +79,12 @@
             android:layout_height="wrap_content"
             android:text="수  정"
             />
+        <Button
+            android:id="@+id/but_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="삭  제"
+            />
 
 </LinearLayout>
 

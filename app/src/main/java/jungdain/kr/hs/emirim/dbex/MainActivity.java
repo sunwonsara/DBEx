@@ -28,48 +28,48 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        editName=(EditText)findViewById(R.id.edit_group_name);
-        editCount=(EditText)findViewById(R.id.edit_group_count);
-        editResultName=(EditText)findViewById(R.id.edit_result_name);
-        editResultCount=(EditText)findViewById(R.id.edit_result_count);
-        butInit=(Button)findViewById(R.id.but_init);
-        butInsert=(Button)findViewById(R.id.but_insert);
-        butSelect=(Button)findViewById(R.id.but_select);
-        butUpdate=(Button)findViewById(R.id.but_update);
-
+        editName = (EditText) findViewById(R.id.edit_group_name);
+        editCount = (EditText) findViewById(R.id.edit_group_count);
+        editResultName = (EditText) findViewById(R.id.edit_result_name);
+        editResultCount = (EditText) findViewById(R.id.edit_result_count);
+        butInit = (Button) findViewById(R.id.but_init);
+        butInsert = (Button) findViewById(R.id.but_insert);
+        butSelect = (Button) findViewById(R.id.but_select);
+        butUpdate = (Button) findViewById(R.id.but_update);
+        butDelete = (Button) findViewById(R.id.but_delete);
 
         //DB생성
-        myHelper=new MyDBHelper(this);
+        myHelper = new MyDBHelper(this);
         //기존의 테이블이 존재하면 삭제하고 테이블을 새로 생성한다.
         butInit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sqlDb=myHelper.getWritableDatabase();
-                myHelper.onUpgrade(sqlDb,1,2);
+                sqlDb = myHelper.getWritableDatabase();
+                myHelper.onUpgrade(sqlDb, 1, 2);
                 sqlDb.close();
             }
         });
         butInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sqlDb=myHelper.getWritableDatabase();
-                String sql="insert into idolTable values('"+editName.getText()+"',"+editCount.getText()+")";
+                sqlDb = myHelper.getWritableDatabase();
+                String sql = "insert into idolTable values('" + editName.getText() + "'," + editCount.getText() + ")";
                 sqlDb.execSQL(sql);
                 sqlDb.close();
-                Toast.makeText(MainActivity.this,"저장됨",Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "저장됨", Toast.LENGTH_LONG).show();
             }
         });
         butSelect.setOnClickListener(new View.OnClickListener() {  //select는 그냥 조회만
             @Override
             public void onClick(View v) {
-                sqlDb=myHelper.getReadableDatabase();
-                String sql="select*from idolTable";
-                Cursor cursor=sqlDb.rawQuery(sql,null);
-                String names="Idol 이름"+"\r\n"+"=================="+"\r\n";
-                String counts="Idol 인원수"+"\r\n"+"=================="+"\r\n";
-                while(cursor.moveToNext()){
-                    names+=cursor.getString(0)+"\r\n";
-                    counts+=cursor.getInt(1)+"\r\n";
+                sqlDb = myHelper.getReadableDatabase();
+                String sql = "select*from idolTable";
+                Cursor cursor = sqlDb.rawQuery(sql, null);
+                String names = "Idol 이름" + "\r\n" + "==================" + "\r\n";
+                String counts = "Idol 인원수" + "\r\n" + "==================" + "\r\n";
+                while (cursor.moveToNext()) {
+                    names += cursor.getString(0) + "\r\n";
+                    counts += cursor.getInt(1) + "\r\n";
                 }
                 editResultName.setText(names);
                 editResultCount.setText(counts);
@@ -81,14 +81,23 @@ public class MainActivity extends AppCompatActivity {
         butUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sqlDb=myHelper.getWritableDatabase();
-                String sql="update idolTable set idolCount="+editCount.getText()+" where idolName='"+editName.getText()+"'";
+                sqlDb = myHelper.getWritableDatabase();
+                String sql = "update idolTable set idolCount=" + editCount.getText() + " where idolName='" + editName.getText() + "'";
                 sqlDb.execSQL(sql);
                 sqlDb.close();
-                Toast.makeText(MainActivity.this,"인원수가 수정됨",Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "인원수가 수정됨", Toast.LENGTH_LONG).show();
             }
         });
-
+        butDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqlDb = myHelper.getWritableDatabase();
+                String sql = "delete from idolTable where idolName='" + editName.getText()+"'";
+                sqlDb.execSQL(sql);
+                sqlDb.close();
+                Toast.makeText(MainActivity.this, "인원수가 삭제됨", Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
