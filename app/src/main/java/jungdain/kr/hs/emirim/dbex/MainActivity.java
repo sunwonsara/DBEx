@@ -64,8 +64,14 @@ public class MainActivity extends AppCompatActivity {
                 String names="Idol 이름"+"\r\n"+"=================="+"\r\n";
                 String counts="Idol 인원수"+"\r\n"+"=================="+"\r\n";
                 while(cursor.moveToNext()){
-
+                    names+=cursor.getString(0)+"\r\n";
+                    counts+=cursor.getInt(1)+"\r\n";
                 }
+                editResultName.setText(names);
+                editResultCount.setText(counts);
+                cursor.close();
+                sqlDb.close();
+
             }
         });
     }
@@ -84,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         //이미 idolTable이 존재한다면 기존의 테이블을 삭제하고 새로 테이블을 만들 때 호출한다
         @Override
         public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-            String sql="drop table if exist idolTable"; //만약에 idolTable이 존재한다면 table을 삭제해줘라
+            String sql="drop table if exists idolTable"; //만약에 idolTable이 존재한다면 table을 삭제해줘라
             db.execSQL(sql);
             onCreate(db);
         }
