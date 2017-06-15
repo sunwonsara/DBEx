@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
     Button butInit;
     Button butInsert;
     Button butSelect;
+    Button butUpdate;
+    Button butDelete;
     EditText editName;
     EditText editCount;
     EditText editResultName;
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         butInit=(Button)findViewById(R.id.but_init);
         butInsert=(Button)findViewById(R.id.but_insert);
         butSelect=(Button)findViewById(R.id.but_select);
+        butUpdate=(Button)findViewById(R.id.but_update);
+
 
         //DB생성
         myHelper=new MyDBHelper(this);
@@ -55,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"저장됨",Toast.LENGTH_LONG).show();
             }
         });
-        butSelect.setOnClickListener(new View.OnClickListener() {
+        butSelect.setOnClickListener(new View.OnClickListener() {  //select는 그냥 조회만
             @Override
             public void onClick(View v) {
                 sqlDb=myHelper.getReadableDatabase();
@@ -74,6 +78,18 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        butUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sqlDb=myHelper.getWritableDatabase();
+                String sql="update idolTable set idolCount="+editCount.getText()+" where idolName='"+editName.getText()+"'";
+                sqlDb.execSQL(sql);
+                sqlDb.close();
+                Toast.makeText(MainActivity.this,"인원수가 수정됨",Toast.LENGTH_LONG).show();
+            }
+        });
+
+
     }
 
     class MyDBHelper extends SQLiteOpenHelper {
